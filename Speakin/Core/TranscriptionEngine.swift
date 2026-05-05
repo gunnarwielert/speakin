@@ -58,8 +58,10 @@ final class TranscriptionEngine {
 
         let decodeOptions = DecodingOptions(
             task: .transcribe,
-            language: nil,
-            usePrefillPrompt: false,
+            language: nil,              // Keep nil for auto-detection
+            usePrefillPrompt: true,     // Enable proper decoder init (WhisperKit default)
+            usePrefillCache: false,     // Don't cache since language varies per recording
+            detectLanguage: true,       // Explicitly enable language detection
             skipSpecialTokens: true,
             withoutTimestamps: true,
             suppressBlank: true
