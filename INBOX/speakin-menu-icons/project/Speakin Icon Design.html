@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speakin — Menu Bar Icon Design</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1a1a;
+    font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── macOS Menu Bar simulation ── */
+  .menubar {
+    width: 100%;
+    height: 28px;
+    background-image: repeating-linear-gradient(
+      45deg,
+      #4a7c3f 0px, #4a7c3f 6px,
+      #c8b400 6px, #c8b400 12px
+    );
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 16px;
+    gap: 4px;
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .menubar-clock {
+    font-size: 12px;
+    color: rgba(0,0,0,0.85);
+    margin-left: 8px;
+    font-weight: 600;
+  }
+
+  .menubar-icon-slot {
+    width: 28px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .menubar-icon-slot:hover { background: rgba(0,0,0,0.1); }
+  .menubar-icon-slot svg { display: block; }
+
+  /* fake system icons */
+  .menubar-filler {
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* ── Main content ── */
+  .content {
+    padding: 48px 32px;
+    width: 100%;
+    max-width: 900px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 20px;
+  }
+
+  /* ── State cards ── */
+  .states-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 56px;
+    flex-wrap: wrap;
+  }
+
+  .state-card {
+    flex: 1;
+    min-width: 140px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 24px 16px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.12s;
+  }
+  .state-card:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.18);
+    transform: translateY(-2px);
+  }
+  .state-card.selected {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.35);
+  }
+
+  .state-name {
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .state-card.selected .state-name { color: rgba(255,255,255,0.9); }
+
+  /* preview backgrounds — simulate the striped menu bar */
+  .icon-preview-bg {
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: repeating-linear-gradient(
+      45deg,
+      #4a7c3f 0px, #4a7c3f 8px,
+      #c8b400 8px, #c8b400 16px
+    );
+  }
+
+  .icon-large-wrap {
+    width: 96px;
+    height: 96px;
+  }
+
+  .icon-actual-wrap {
+    width: 32px;
+    height: 28px;
+  }
+
+  .actual-size-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.25);
+  }
+
+  /* ── Anatomy section ── */
+  .anatomy {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 32px;
+    margin-bottom: 40px;
+  }
+  .anatomy-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .anatomy-col { flex: 1; min-width: 160px; }
+  .anatomy-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+  }
+  .anatomy-svg-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 12px;
+    background-image: repeating-linear-gradient(
+      45deg,
+      #4a7c3f 0px, #4a7c3f 8px,
+      #c8b400 8px, #c8b400 16px
+    );
+  }
+  .anatomy-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.65;
+  }
+  .anatomy-desc strong { color: rgba(255,255,255,0.8); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- Simulated macOS menu bar -->
+<div class="menubar">
+  <!-- Fake system icons -->
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" opacity="0.7"><rect x="2" y="2" width="12" height="12" rx="3" fill="white" opacity="0.5"/></svg>
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" opacity="0.7"><path d="M8 1 L15 13 H1 Z" fill="white" opacity="0.5"/></svg>
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" opacity="0.7"><circle cx="8" cy="8" r="6" stroke="white" stroke-width="1.5" opacity="0.5"/></svg>
+
+  <!-- Speakin icon slot — updates with selected state -->
+  <div class="menubar-icon-slot active" id="menubarSlot">
+    <!-- injected by JS -->
+  </div>
+
+  <div class="menubar-clock">Sat Apr 18 &nbsp;13:04</div>
+</div>
+
+<!-- Main content -->
+<div class="content">
+  <div class="section-label">Speakin · Menu Bar Icon · All States</div>
+
+  <div class="states-row" id="statesRow">
+    <!-- cards injected by JS -->
+  </div>
+
+  <div class="section-label">Anatomy</div>
+  <div class="anatomy">
+    <div class="anatomy-row">
+      <div class="anatomy-col">
+        <div class="anatomy-title">Idle — standalone bubble</div>
+        <div class="anatomy-svg-wrap">
+          <!-- 4× enlarged anatomy view -->
+          <svg width="120" height="120" viewBox="0 0 18 18">
+            <path d="M 14.5,2 
+                     C 16.2,2 17,2.8 17,4.5
+                     L 17,11.5
+                     C 17,13.2 16.2,14 14.5,14
+                     L 8.5,14
+                     C 7.5,14.8 5.8,16.2 4,16.5
+                     C 4.8,15.5 5,14.5 5,14
+                     L 3.5,14
+                     C 1.8,14 1,13.2 1,11.5
+                     L 1,4.5
+                     C 1,2.8 1.8,2 3.5,2 Z"
+                  fill="white"/>
+          </svg>
+        </div>
+        <div class="anatomy-desc">
+          <strong>Fully rounded body</strong> with generous corner radii.<br>
+          Tail sweeps gently from the <strong>bottom-left</strong>, curves toward the <strong>bottom-center</strong> — no sharp points.
+        </div>
+      </div>
+
+      <div class="anatomy-col">
+        <div class="anatomy-title">Active states — rounded rect + cutout</div>
+        <div class="anatomy-svg-wrap">
+          <svg width="120" height="120" viewBox="0 0 18 18">
+            <!-- rounded rect filled, bubble cut out via evenodd -->
+            <g fill="white" fill-rule="evenodd">
+              <!-- outer rounded rect -->
+              <rect x="0.5" y="0.5" width="17" height="17" rx="3.5" ry="3.5"/>
+              <!-- speech bubble cutout (same shape as idle, slightly inset) -->
+              <path d="M 13.5,3
+                       C 14.8,3 15.5,3.7 15.5,5
+                       L 15.5,10.5
+                       C 15.5,11.8 14.8,12.5 13.5,12.5
+                       L 8,12.5
+                       C 7.2,13.2 5.8,14.3 4.2,14.5
+                       C 4.8,13.7 5,12.9 4.9,12.5
+                       L 4.5,12.5
+                       C 3.2,12.5 2.5,11.8 2.5,10.5
+                       L 2.5,5
+                       C 2.5,3.7 3.2,3 4.5,3 Z"/>
+            </g>
+          </svg>
+        </div>
+        <div class="anatomy-desc">
+          <strong>Filled rounded rectangle</strong> with the bubble <strong>cut out</strong> as negative space.<br>
+          Symbol (···, ✓, !) sits inside the transparent bubble area.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── SVG path helpers ──────────────────────────────────────────────
+// All paths on 18×18 canvas.
+
+// Idle: friendly speech bubble with larger corner radii (r≈3.8)
+// Tail sweeps from bottom-left, curves gently toward bottom-center
+const BUBBLE_PATH =
+  `M 4.8,1.2 L 13.2,1.2 A 3.8,3.8 0 0 1 17,5 L 17,11.5 A 3.8,3.8 0 0 1 13.2,15.3 ` +
+  `L 8.3,15.3 C 7.2,16.2 5.4,17.1 3.7,17.4 C 4.4,16.2 4.6,15.2 4.55,15.3 ` +
+  `L 4.8,15.3 A 3.8,3.8 0 0 1 1,11.5 L 1,5 A 3.8,3.8 0 0 1 4.8,1.2 Z`;
+
+// Active states: outer rounded rect path + bubble cutout path
+// Combined into ONE <path> with fill-rule="evenodd" so the bubble becomes transparent
+const OUTER_RECT_PATH =
+  `M 4.2,0.5 L 13.8,0.5 A 3.5,3.5 0 0 1 17.5,4.2 L 17.5,13.8 A 3.5,3.5 0 0 1 13.8,17.5 ` +
+  `L 4.2,17.5 A 3.5,3.5 0 0 1 0.5,13.8 L 0.5,4.2 A 3.5,3.5 0 0 1 4.2,0.5 Z`;
+
+// Bubble cutout — slightly inset version of the idle bubble
+const BUBBLE_CUTOUT_PATH =
+  `M 5.4,2.8 L 12.6,2.8 A 2.8,2.8 0 0 1 15.4,5.6 L 15.4,10.8 A 2.8,2.8 0 0 1 12.6,13.6 ` +
+  `L 8.1,13.6 C 7.2,14.4 5.7,15.1 4.3,15.4 C 4.9,14.4 5.05,13.7 5.0,13.6 ` +
+  `L 5.4,13.6 A 2.8,2.8 0 0 1 2.6,10.8 L 2.6,5.6 A 2.8,2.8 0 0 1 5.4,2.8 Z`;
+
+// Combined path for active states (outer rect + cutout = single path with evenodd)
+const ACTIVE_PATH = OUTER_RECT_PATH + ' ' + BUBBLE_CUTOUT_PATH;
+
+function makeSVG(state, size) {
+  const vb = '0 0 18 18';
+
+  if (state === 'idle') {
+    return `<svg width="${size}" height="${size}" viewBox="${vb}" xmlns="http://www.w3.org/2000/svg">
+      <path d="${BUBBLE_PATH}" fill="white"/>
+    </svg>`;
+  }
+
+  // active states: filled rect with bubble cutout via evenodd on single combined path
+  let inner = '';
+  const cx = 9, cy = 8.2;
+
+  if (state === 'processing') {
+    inner = `
+      <circle class="dot1" cx="${cx - 2.5}" cy="${cy}" r="0.85" fill="white"/>
+      <circle class="dot2" cx="${cx}"        cy="${cy}" r="0.85" fill="white"/>
+      <circle class="dot3" cx="${cx + 2.5}"  cy="${cy}" r="0.85" fill="white"/>
+    `;
+  } else if (state === 'success') {
+    inner = `<polyline points="5.8,8.5 8,10.8 12.4,5.8"
+               fill="none" stroke="white" stroke-width="1.4"
+               stroke-linecap="round" stroke-linejoin="round"/>`;
+  } else if (state === 'error') {
+    inner = `
+      <line x1="9" y1="5.2" x2="9" y2="9.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="9" cy="11.4" r="0.8" fill="white"/>
+    `;
+  }
+
+  return `<svg width="${size}" height="${size}" viewBox="${vb}" xmlns="http://www.w3.org/2000/svg">
+    <path d="${ACTIVE_PATH}" fill="white" fill-rule="evenodd"/>
+    ${inner}
+  </svg>`;
+}
+
+// ── State definitions ─────────────────────────────────────────────
+const states = [
+  { id: 'idle',       label: 'Idle',       desc: 'Standalone speech bubble, full opacity' },
+  { id: 'listening',  label: 'Listening',  desc: 'Rectangle + empty bubble cutout' },
+  { id: 'processing', label: 'Processing', desc: 'Rectangle + bubble + animated dots' },
+  { id: 'success',    label: 'Success',    desc: 'Rectangle + bubble + checkmark' },
+  { id: 'error',      label: 'Error',      desc: 'Rectangle + bubble + exclamation' },
+];
+
+let selectedState = 'idle';
+
+function renderCards() {
+  const row = document.getElementById('statesRow');
+  row.innerHTML = '';
+
+  states.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'state-card' + (s.id === selectedState ? ' selected' : '');
+    card.innerHTML = `
+      <div class="state-name">${s.label}</div>
+      <div class="icon-large">${makeSVG(s.id, 72)}</div>
+      <div class="icon-actual">
+        <span class="actual-label">18 px</span>
+        ${makeSVG(s.id, 18)}
+      </div>
+    `;
+    card.addEventListener('click', () => {
+      selectedState = s.id;
+      renderCards();
+      renderMenubar();
+    });
+    row.appendChild(card);
+  });
+}
+
+function renderMenubar() {
+  document.getElementById('menubarSlot').innerHTML = makeSVG(selectedState, 18);
+}
+
+renderCards();
+renderMenubar();
+</script>
+</body>
+</html>
